@@ -40,6 +40,12 @@ const generateAlbums = (count) => {
     const dateAdded = getRandomDate(projectStart, now);
     const lastUpdated = getRandomDate(new Date(dateAdded), now);
 
+    // Ensure unique tags
+    const pickedTags = new Set();
+    while (pickedTags.size < (Math.random() > 0.5 ? 2 : 1)) {
+      pickedTags.add(tags[Math.floor(Math.random() * tags.length)]);
+    }
+
     albums.push({
       id: i + 1,
       artist: artist,
@@ -47,10 +53,7 @@ const generateAlbums = (count) => {
       coverUrl: `https://picsum.photos/seed/${i}/300/300`,
       country: countries[Math.floor(Math.random() * countries.length)],
       year: 1960 + Math.floor(Math.random() * 64),
-      tags: [
-        tags[Math.floor(Math.random() * tags.length)],
-        Math.random() > 0.5 ? tags[Math.floor(Math.random() * tags.length)] : null
-      ].filter(Boolean),
+      tags: Array.from(pickedTags),
       dateAdded: dateAdded,
       lastUpdated: lastUpdated
     });

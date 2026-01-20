@@ -1,21 +1,43 @@
 import { useState, useRef, useEffect } from 'react';
 import { countries, tags, PROJECT_START_DATE } from '../data/mockData';
 import FilterChip from './FilterChip';
+import StatsModal from './StatsModal';
+import { useAdmin } from '../context/AdminContext'; // Import Context hook
 import './Header.css';
+
+// Admin Toggle Component
+const AdminToggle = () => {
+    const { isEditMode, toggleEditMode } = useAdmin();
+    return (
+        <button
+            className={`admin-toggle-btn ${isEditMode ? 'active' : ''}`}
+            onClick={toggleEditMode}
+            title="Toggle Admin Mode"
+        >
+            {isEditMode ? 'ADMIN ON' : 'ADMIN OFF'}
+        </button>
+    );
+};
 
 const Header = ({
     searchQuery, setSearchQuery,
     activeFilters, setActiveFilters,
     availableYears, availableDecades,
     viewMode, setViewMode,
-    grouping, setGrouping
+    grouping, setGrouping,
+    sortOption, setSortOption,
+    allAlbums
 }) => {
     const [isAddFilterOpen, setIsAddFilterOpen] = useState(false);
     const [isAboutOpen, setIsAboutOpen] = useState(false);
     const [isGroupOpen, setIsGroupOpen] = useState(false);
+    const [isSortOpen, setIsSortOpen] = useState(false);
+    const [isStatsOpen, setIsStatsOpen] = useState(false);
+
     const addFilterRef = useRef(null);
     const aboutRef = useRef(null);
     const groupRef = useRef(null);
+    const sortRef = useRef(null);
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -27,6 +49,9 @@ const Header = ({
             }
             if (groupRef.current && !groupRef.current.contains(event.target)) {
                 setIsGroupOpen(false);
+            }
+            if (sortRef.current && !sortRef.current.contains(event.target)) {
+                setIsSortOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -62,6 +87,11 @@ const Header = ({
         setIsGroupOpen(false);
     };
 
+    const handleSortSelect = (value) => {
+        setSortOption(value);
+        setIsSortOpen(false);
+    };
+
     const filterOptions = {
         'country': { label: 'País', options: countries },
         'decade': { label: 'Década', options: availableDecades },
@@ -76,7 +106,7 @@ const Header = ({
             {/* Single Compact Actions Row */}
             <div className="header-actions-row">
 
-                {/* Left Group: Brand - About - Contact */}
+                {/* Left Group: Brand - About - Contact - STATS */}
                 <div className="actions-left-group">
                     {/* Brand Name (Replaces Title) */}
                     <div className="brand-name-compact">MAXI ESCUCHA MÚSICA</div>
@@ -108,6 +138,20 @@ const Header = ({
                             </svg>
                         </a>
                     </div>
+
+                    <div className="header-action-item">
+                        <button
+                            className="icon-btn"
+                            onClick={() => setIsStatsOpen(true)}
+                            title="Ver Estadísticas"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="18" y="3" width="4" height="18"></rect>
+                                <rect x="10" y="8" width="4" height="13"></rect>
+                                <rect x="2" y="13" width="4" height="8"></rect>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
                 {/* Center Group: Search */}
@@ -120,6 +164,11 @@ const Header = ({
                         className="search-input-compact"
                     />
                 </div>
+
+                {/* Admin Toggle (Dev Only) */}
+                {import.meta.env.DEV && (
+                    <AdminToggle />
+                )}
 
                 {/* Right Group: Filter - Group - View */}
                 <div className="actions-right-group">
@@ -196,6 +245,106 @@ const Header = ({
                         )}
                     </div>
 
+                    {/* Sort Icon (Menu) */}
+                    <div className="header-action-item" ref={sortRef}>
+                        <button
+                            className={`icon-btn ${sortOption !== 'newest' ? 'active-control' : ''}`}
+                            onClick={() => setIsSortOpen(!isSortOpen)}
+                            title="Ordenar"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="19" x2="12" y2="5"></line>
+                                <polyline points="5 12 12 5 19 12"></polyline>
+                            </svg>
+                        </button>
+                        {isSortOpen && (
+                            <div className="add-filter-dropdown right-aligned sort-dropdown-wide">
+                                <div className="add-filter-item-header">Ordenar por...</div>
+
+                                {/* Artist */}
+                                <div className="sort-row-item">
+                                    <span
+                                        className={`sort-label ${sortOption.startsWith('artist') ? 'active' : ''}`}
+                                        onClick={() => handleSortSelect('artist_asc')}
+                                    >Alfabético (Artista)</span>
+                                    <div className="sort-arrows">
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'artist_asc' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('artist_asc'); }}
+                                            title="A-Z"
+                                        >▲</button>
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'artist_desc' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('artist_desc'); }}
+                                            title="Z-A"
+                                        >▼</button>
+                                    </div>
+                                </div>
+
+                                {/* Album */}
+                                <div className="sort-row-item">
+                                    <span
+                                        className={`sort-label ${sortOption.startsWith('album') ? 'active' : ''}`}
+                                        onClick={() => handleSortSelect('album_asc')}
+                                    >Alfabético (Álbum)</span>
+                                    <div className="sort-arrows">
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'album_asc' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('album_asc'); }}
+                                            title="A-Z"
+                                        >▲</button>
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'album_desc' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('album_desc'); }}
+                                            title="Z-A"
+                                        >▼</button>
+                                    </div>
+                                </div>
+
+                                {/* Added (Date) */}
+                                <div className="sort-row-item">
+                                    <span
+                                        className={`sort-label ${['newest', 'oldest'].includes(sortOption) ? 'active' : ''}`}
+                                        onClick={() => handleSortSelect('newest')}
+                                    >Añadido</span>
+                                    <div className="sort-arrows">
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'oldest' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('oldest'); }}
+                                            title="Más antiguos"
+                                        >▲</button>
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'newest' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('newest'); }}
+                                            title="Más recientes"
+                                        >▼</button>
+                                    </div>
+                                </div>
+
+                                {/* Release Year */}
+                                <div className="sort-row-item">
+                                    <span
+                                        className={`sort-label ${sortOption.includes('year') ? 'active' : ''}`}
+                                        onClick={() => handleSortSelect('year_desc')}
+                                    >Año de Lanzamiento</span>
+                                    <div className="sort-arrows">
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'year_asc' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('year_asc'); }}
+                                            title="Viejos a Nuevos"
+                                        >▲</button>
+                                        <button
+                                            className={`arrow-btn ${sortOption === 'year_desc' ? 'active' : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); handleSortSelect('year_desc'); }}
+                                            title="Nuevos a Viejos"
+                                        >▼</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        )}
+                    </div>
+
                     {/* View Toggles */}
                     <div className="view-toggle-group">
                         <button
@@ -228,22 +377,31 @@ const Header = ({
                 </div>
             </div>
 
+
             {/* Active Filters Row - Only Render if Filters Exist */}
-            {Object.keys(activeFilters).length > 0 && (
-                <div className="active-filters-row">
-                    {Object.entries(activeFilters).map(([key, values]) => (
-                        <FilterChip
-                            key={key}
-                            label={filterOptions[key].label}
-                            options={filterOptions[key].options}
-                            selectedValues={values}
-                            onChange={(newValues) => handleFilterChange(key, newValues)}
-                            onRemove={() => removeFilterType(key)}
-                        />
-                    ))}
-                </div>
-            )}
-        </div>
+            {
+                Object.keys(activeFilters).length > 0 && (
+                    <div className="active-filters-row">
+                        {Object.entries(activeFilters).map(([key, values]) => (
+                            <FilterChip
+                                key={key}
+                                label={filterOptions[key].label}
+                                options={filterOptions[key].options}
+                                selectedValues={values}
+                                onChange={(newValues) => handleFilterChange(key, newValues)}
+                                onRemove={() => removeFilterType(key)}
+                            />
+                        ))}
+                    </div>
+                )
+            }
+
+            <StatsModal
+                isOpen={isStatsOpen}
+                onClose={() => setIsStatsOpen(false)}
+                albums={allAlbums}
+            />
+        </div >
     );
 };
 

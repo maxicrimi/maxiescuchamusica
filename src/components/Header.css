@@ -131,6 +131,13 @@
     transition: all 0.2s;
     text-decoration: none;
     padding: 0;
+    line-height: 0;
+    /* Remove text baseline interference */
+}
+
+.icon-btn svg {
+    display: block;
+    /* Remove inline-block spacing */
 }
 
 .icon-btn:hover,
@@ -305,4 +312,138 @@
     color: var(--accent-blue-sky);
     /* Highlight icon color */
     background-color: rgba(135, 206, 235, 0.1);
+}
+
+/* Sort Dropdown Premium Styles */
+.sort-dropdown-wide {
+    width: 250px;
+    padding: 0.5rem;
+}
+
+.sort-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    cursor: default;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.sort-row-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sort-label {
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+.sort-label:hover {
+    color: white;
+}
+
+.sort-label.active {
+    color: #87CEEB;
+    font-weight: 600;
+}
+
+.sort-arrows {
+    display: flex;
+    gap: 2px;
+}
+
+.arrow-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 0.7rem;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.arrow-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #aaa;
+}
+
+.arrow-btn.active {
+    color: #87CEEB;
+    font-weight: bold;
+    background: rgba(135, 206, 235, 0.1);
+}
+
+/* === Mobile Responsiveness === */
+@media (max-width: 768px) {
+    .header-wrapper {
+        position: fixed;
+        /* Force fixed to guarantee it stays at top */
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin: 0;
+        z-index: 9999;
+    }
+
+    .header-actions-row {
+        padding: 0 0.75rem;
+        /* Tight padding */
+        gap: 0.5rem;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .brand-name-compact {
+        display: none;
+    }
+
+    .actions-left-group {
+        min-width: auto;
+        gap: 0.25rem;
+    }
+
+    /* Hide About (?) AND Mail icons on mobile to save space. Only Stats remains. */
+    .actions-left-group .header-action-item:nth-child(2),
+    .actions-left-group .header-action-item:nth-child(3) {
+        display: none;
+    }
+
+    .actions-right-group {
+        min-width: auto;
+        gap: 0.25rem;
+    }
+
+    .actions-center-group {
+        flex: 1;
+        min-width: 0;
+        /* Critical for flex shrinking */
+    }
+
+    .search-input-compact {
+        font-size: 0.8rem;
+        padding: 0 0.75rem;
+        width: 100%;
+        min-width: 0;
+        /* Allow shrinking */
+    }
+
+    .view-toggle-group {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .actions-center-group {
+        display: flex;
+        /* Ensure search is visible */
+    }
+
+    /* Ensure icon buttons are not too big */
+    .icon-btn {
+        width: 28px;
+        height: 28px;
+    }
 }

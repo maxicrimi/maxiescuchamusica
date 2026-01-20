@@ -1,15 +1,31 @@
 import './AlbumCard.css';
 
-const AlbumCard = ({ album, viewMode }) => {
+import './AlbumCard.css';
+
+const AlbumCard = ({ album, viewMode, onEdit, onDelete, onClick }) => {
     const formatDate = (isoString) => {
         if (!isoString) return '-';
         return new Date(isoString).toLocaleDateString('es-AR');
     };
 
     return (
-        <div className={`album-card ${viewMode}`}>
+        <div className={`album-card ${viewMode}`} onClick={onClick}>
             <div className="album-cover-container">
                 <img src={album.coverUrl} alt={album.title} className="album-cover" loading="lazy" />
+                {onEdit && (
+                    <div className="admin-overlay">
+                        <button className="admin-btn btn-edit" onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit();
+                        }}>EDITAR</button>
+                        {onDelete && (
+                            <button className="admin-btn btn-delete" onClick={(e) => {
+                                e.stopPropagation();
+                                onDelete();
+                            }}>BORRAR</button>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div className="album-info">

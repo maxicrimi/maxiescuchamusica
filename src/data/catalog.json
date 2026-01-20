@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "artist": "Radiohead",
+    "title": "In Rainbows",
+    "coverUrl": "https://picsum.photos/seed/1/300/300",
+    "country": "UK",
+    "year": 2007,
+    "tags": [
+      "Art Rock",
+      "Electronic",
+      "Experimental",
+      "Logos"
+    ],
+    "dateAdded": "2024-01-20T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "artist": "Charly García",
+    "title": "Clics Modernos",
+    "coverUrl": "https://picsum.photos/seed/2/300/300",
+    "country": "Argentina",
+    "year": 1983,
+    "tags": [
+      "Rock Nacional",
+      "New Wave",
+      "Pop"
+    ],
+    "dateAdded": "2024-01-21T15:30:00Z"
+  }
+]

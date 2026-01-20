@@ -3,35 +3,67 @@ import Header from './components/Header';
 import AlbumCard from './components/AlbumCard';
 import Pagination from './components/Pagination';
 import { mockAlbums } from './data/mockData';
+import { AdminProvider, useAdmin } from './context/AdminContext';
+import AlbumEditorModal from './components/AlbumEditorModal';
+import AlbumDetailModal from './components/AlbumDetailModal';
 import './App.css';
 
 const ITEMS_PER_PAGE = 50;
 
-function App() {
+// Inner App Component that uses the Context
+function MusicApp() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState({});
   const [viewMode, setViewMode] = useState('grid');
   const [grouping, setGrouping] = useState(null); // 'year', 'decade', 'country', null
+  const [sortOption, setSortOption] = useState('newest'); // 'newest', 'oldest', 'year_desc', 'year_asc', 'alpha'
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Use data from Admin Context (which handles Dev/Prod switch)
+  const { albums: contextAlbums, isEditMode, deleteAlbum } = useAdmin();
+
+  // Create Modal State locally to control opening
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingAlbum, setEditingAlbum] = useState(null);
+  const [viewingAlbum, setViewingAlbum] = useState(null); // State for Detail Modal
+
+  const handleEdit = (album) => {
+    setEditingAlbum(album);
+    setIsModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setEditingAlbum(null); // Clear for new
+    setIsModalOpen(true);
+  };
 
   // Derive available years and decades
   const { years, decades } = useMemo(() => {
-    const allYears = [...new Set(mockAlbums.map(a => a.year))].sort((a, b) => b - a);
-    const allDecades = [...new Set(mockAlbums.map(a => Math.floor(a.year / 10) * 10))].sort((a, b) => b - a);
+    // Determine data source: empty contextAlbums? use mock?
+    // Let's rely on contextAlbums being populated.
+    const sourceData = contextAlbums.length > 0 ? contextAlbums : mockAlbums;
+
+    // NOTE: If we switch to purely dynamic, mockAlbums usage here might be redundant/fallback.
+    // For now, let's stick to using `contextAlbums` IF available.
+
+    const dataToUse = contextAlbums.length > 0 ? contextAlbums : mockAlbums;
+
+    const allYears = [...new Set(dataToUse.map(a => a.year))].sort((a, b) => b - a);
+    const allDecades = [...new Set(dataToUse.map(a => Math.floor(a.year / 10) * 10))].sort((a, b) => b - a);
     return {
       years: allYears.map(String),
       decades: allDecades.map(String)
     };
-  }, []);
+  }, [contextAlbums]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, activeFilters, grouping, viewMode]);
 
-
-
   const filteredAlbums = useMemo(() => {
-    return mockAlbums.filter(album => {
+    const sourceData = contextAlbums.length > 0 ? contextAlbums : mockAlbums;
+
+    return sourceData.filter(album => {
       const matchesSearch =
         album.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
         album.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -59,29 +91,50 @@ function App() {
 
       return true;
     });
-  }, [searchQuery, activeFilters]);
+  }, [searchQuery, activeFilters, contextAlbums]);
 
   // Pagination Logic
-  // Note: Pagination gets tricky with grouping. 
-  // Strategy: Paginate the FLATTENED list first, then group? Or Group the whole list then pagination?
-  // Usually, with grouping, pagination is awkward. 
-  // Let's paginate the ITEMS, then render groups for the items on current page.
-  // OR, if grouping is active, disable pagination or paginate groups?
-  // Use Case: "50 albums per page". We will stick to item-based pagination.
-
   const totalPages = Math.ceil(filteredAlbums.length / ITEMS_PER_PAGE);
-  const currentAlbums = useMemo(() => {
-    // If grouping is active, we might want to sort by that group key first to ensure chunks make sense?
-    let sorted = [...filteredAlbums];
-    if (grouping) {
-      if (grouping === 'year') sorted.sort((a, b) => b.year - a.year);
-      if (grouping === 'decade') sorted.sort((a, b) => b.year - a.year);
-      if (grouping === 'country') sorted.sort((a, b) => a.country.localeCompare(b.country));
-    }
 
+  // Sorting Logic
+  const sortedAlbums = useMemo(() => {
+    let sorted = [...filteredAlbums];
+
+    switch (sortOption) {
+      case 'newest':
+        sorted.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+        break;
+      case 'oldest':
+        sorted.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+        break;
+      case 'year_desc':
+        sorted.sort((a, b) => b.year - a.year);
+        break;
+      case 'year_asc':
+        sorted.sort((a, b) => a.year - b.year);
+        break;
+      case 'artist_asc':
+        sorted.sort((a, b) => a.artist.localeCompare(b.artist));
+        break;
+      case 'artist_desc':
+        sorted.sort((a, b) => b.artist.localeCompare(a.artist));
+        break;
+      case 'album_asc':
+        sorted.sort((a, b) => a.album.localeCompare(b.album));
+        break;
+      case 'album_desc':
+        sorted.sort((a, b) => b.album.localeCompare(a.album));
+        break;
+      default:
+        sorted.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+    }
+    return sorted;
+  }, [filteredAlbums, sortOption]);
+
+  const currentAlbums = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return sorted.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredAlbums, currentPage, grouping]);
+    return sortedAlbums.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [sortedAlbums, currentPage]);
 
   // Grouping Render Logic
   const groupedAlbums = useMemo(() => {
@@ -97,7 +150,7 @@ function App() {
       if (!groups[key]) groups[key] = [];
       groups[key].push(album);
     });
-    return groups; // Returns object { "2024": [...], "2023": [...] }
+    return groups;
   }, [currentAlbums, grouping]);
 
 
@@ -114,11 +167,44 @@ function App() {
         setViewMode={setViewMode}
         grouping={grouping}
         setGrouping={setGrouping}
+        sortOption={sortOption}
+        setSortOption={setSortOption}
+        allAlbums={filteredAlbums}
+      />
+
+      {/* FAB for Adding (Only in Edit Mode) */}
+      {isEditMode && (
+        <button
+          className="fab-add-btn"
+          onClick={handleCreate}
+          title="Agregar Disco"
+          style={{
+            position: 'fixed', bottom: '2rem', right: '2rem',
+            width: '60px', height: '60px', borderRadius: '50%',
+            backgroundColor: 'var(--accent-blue-sky)', color: 'black',
+            fontSize: '2rem', border: 'none', cursor: 'pointer', zIndex: 1000,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.5)'
+          }}
+        >
+          +
+        </button>
+      )}
+
+      <AlbumEditorModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialData={editingAlbum}
+      />
+
+      <AlbumDetailModal
+        isOpen={!!viewingAlbum}
+        onClose={() => setViewingAlbum(null)}
+        album={viewingAlbum}
       />
 
       <div className="app-container">
         <main>
-          {/* GROUPED VIEW (List or Grid) */}
+          {/* GROUPED VIEW */}
           {grouping && groupedAlbums ? (
             <div className="grouped-container">
               {Object.entries(groupedAlbums).map(([groupTitle, albums]) => (
@@ -127,7 +213,13 @@ function App() {
                   <div className={`album-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
                     {albums.map(album => (
                       <div key={album.id} className="album-item-wrapper">
-                        <AlbumCard album={album} viewMode={viewMode} />
+                        <AlbumCard
+                          album={album}
+                          viewMode={viewMode}
+                          onEdit={isEditMode ? () => handleEdit(album) : null}
+                          onDelete={isEditMode ? () => deleteAlbum(album.id) : null}
+                          onClick={() => setViewingAlbum(album)} // Open Detail
+                        />
                       </div>
                     ))}
                   </div>
@@ -135,11 +227,17 @@ function App() {
               ))}
             </div>
           ) : (
-            /* STANDARD VIEW (Grid or Flat List) */
+            /* STANDARD VIEW */
             <div className={`album-container ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
               {currentAlbums.map(album => (
                 <div key={album.id} className="album-item-wrapper">
-                  <AlbumCard album={album} viewMode={viewMode} />
+                  <AlbumCard
+                    album={album}
+                    viewMode={viewMode}
+                    onEdit={isEditMode ? () => handleEdit(album) : null}
+                    onDelete={isEditMode ? () => deleteAlbum(album.id) : null}
+                    onClick={() => setViewingAlbum(album)} // Open Detail
+                  />
                 </div>
               ))}
             </div>
@@ -159,6 +257,14 @@ function App() {
         />
       </div>
     </>
+  );
+}
+
+function App() {
+  return (
+    <AdminProvider>
+      <MusicApp />
+    </AdminProvider>
   );
 }
 

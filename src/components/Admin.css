@@ -1,0 +1,295 @@
+.admin-toggle-btn {
+    background-color: #333;
+    color: #ffd700;
+    /* Gold for Admin */
+    border: 1px solid #ffd700;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 1rem;
+    text-transform: uppercase;
+}
+
+.admin-toggle-btn.active {
+    background-color: #ffd700;
+    color: #000;
+}
+
+/* Edit Overlay on Card */
+.admin-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 10;
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.album-card:hover .admin-overlay {
+    opacity: 1;
+}
+
+.admin-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.btn-edit {
+    background-color: var(--accent-blue-sky);
+    color: #000;
+}
+
+.btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+/* Modal Styles override/extension */
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.form-group input {
+    background-color: #222;
+    border: 1px solid #444;
+    padding: 0.5rem;
+    color: white;
+    border-radius: 4px;
+}
+
+.image-dropzone {
+    border: 2px dashed #444;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    background-size: cover;
+    background-position: center;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-dropzone:hover,
+.image-dropzone.dragging {
+    border-color: var(--accent-blue-sky);
+    background-color: rgba(135, 206, 235, 0.05);
+}
+
+.drop-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem;
+    border-radius: 4px;
+    position: relative;
+    z-index: 2;
+}
+
+.preview-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.5;
+    z-index: 1;
+}
+
+.submit-btn {
+    background-color: var(--accent-blue-sky);
+    color: #000;
+    padding: 0.75rem;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* === MODAL & DETAIL STYLES === */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+    padding: 2rem;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.detail-modal {
+    max-width: 800px;
+    /* Wider for detail view */
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+    z-index: 10;
+}
+
+.modal-close:hover {
+    color: white;
+}
+
+.detail-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+}
+
+.detail-cover-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.detail-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.detail-artist {
+    font-size: 1.5rem;
+    color: var(--accent-blue-sky);
+    margin: 0;
+    font-weight: 400;
+}
+
+.detail-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 cols */
+    gap: 1rem;
+    background: #222;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.detail-meta-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 0.25rem;
+}
+
+.meta-value {
+    color: white;
+    font-weight: 600;
+}
+
+.detail-tags-section {
+    margin-top: 1rem;
+}
+
+.detail-tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.tag-pill.large {
+    font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .detail-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .detail-cover-container {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .detail-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .detail-artist {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+}
