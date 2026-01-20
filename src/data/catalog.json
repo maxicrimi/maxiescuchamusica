@@ -5,7 +5,7 @@
     "title": "Gifted",
     "year": 2022,
     "country": "Jamaica",
-    "coverUrl": "/covers/1768933710275-koffee..jpg",
+    "coverUrl": "covers/1768933710275-koffee..jpg",
     "tags": [
       "Reggae",
       "Dancehall"
@@ -22,7 +22,7 @@
       "R&B",
       "Hip Hop"
     ],
-    "coverUrl": "/covers/1768934064856-unnamed.jpg",
+    "coverUrl": "covers/1768934064856-unnamed.jpg",
     "dateAdded": "2026-01-20T18:30:46.392Z",
     "id": 1768934029157
   },
@@ -38,7 +38,7 @@
       "Americana",
       "Indie Folk"
     ],
-    "coverUrl": "/covers/1768934255564-page.jpg",
+    "coverUrl": "covers/1768934255564-page.jpg",
     "dateAdded": "2026-01-20T18:35:01.354Z",
     "id": 1768934193422
   },
@@ -69,7 +69,7 @@
       "Jazz",
       "Bolero"
     ],
-    "coverUrl": "/covers/1768934831508-cancionera.jpg",
+    "coverUrl": "covers/1768934831508-cancionera.jpg",
     "dateAdded": "2026-01-20T18:45:27.600Z",
     "id": 1768934799468
   }
