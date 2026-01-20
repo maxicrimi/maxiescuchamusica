@@ -1,0 +1,308 @@
+.header-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    /* Separates Actions Row from Active Filters */
+    margin-bottom: 0;
+    /* Removing margin, let app-container padding handle regular rhythm */
+    padding: 0.75rem 0;
+    /* Symmetric padding for vertical centering */
+    /* Sticky & Premium Glassmorphism */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    /* Full Width */
+    background-color: rgba(18, 18, 18, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Brand Name (Replaces Title Row) */
+.brand-name-compact {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    /* Matches icon visual weight approx */
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 1rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    height: 32px;
+    /* Uniform height */
+}
+
+/* === Row 2: Actions (Left - Center - Right) === */
+.header-actions-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    height: 32px;
+    /* Force row to match elements */
+    gap: 1rem;
+
+    /* Layout Alignment with App Body */
+    width: 100%;
+    max-width: 1800px;
+    /* Match App Container */
+    margin: 0 auto;
+    padding: 0 4rem;
+    /* Match App Container Padding Side */
+}
+
+.actions-left-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+    height: 32px;
+}
+
+.actions-center-group {
+    flex: 1;
+    /* Takes remaining space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+}
+
+.actions-right-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 150px;
+    justify-content: flex-end;
+    height: 32px;
+}
+
+.search-input-compact {
+    width: 100%;
+    max-width: 600px;
+    /* Max width */
+    padding: 0 1rem;
+    /* Compact padding */
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 20px;
+    /* Match height */
+    color: var(--text-main);
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    height: 32px;
+    /* Strict Height */
+    display: flex;
+    align-items: center;
+}
+
+.search-input-compact:focus {
+    outline: none;
+    border-color: var(--accent-blue-sky);
+    background-color: #252525;
+}
+
+.header-action-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 32px;
+}
+
+.icon-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: var(--text-secondary);
+    width: 32px;
+    /* Smaller icons */
+    height: 32px;
+    /* Strict Height */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    text-decoration: none;
+    padding: 0;
+}
+
+.icon-btn:hover,
+.icon-btn.active-control {
+    color: var(--accent-blue-sky);
+    border-color: var(--accent-blue-sky);
+    background-color: rgba(135, 206, 235, 0.05);
+}
+
+/* Dropdowns */
+.add-filter-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background-color: #252525;
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.add-filter-dropdown.right-aligned {
+    left: auto;
+    right: 0;
+}
+
+.add-filter-item {
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.add-filter-item:hover,
+.add-filter-item.selected {
+    background-color: #333;
+    color: var(--text-main);
+}
+
+.add-filter-item-header {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    color: #666;
+    text-transform: uppercase;
+    font-weight: 700;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0.25rem;
+}
+
+/* About Dropdown */
+/* About Dropdown */
+.about-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background-color: #252525;
+    border: 1px solid #444;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 300px;
+    /* Wider for bio */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.about-name {
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.about-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Active Filters Row */
+.active-filters-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+    /* min-height: 20px; Removed to fix centering when empty */
+
+    /* Layout Alignment */
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    /* Match spacing */
+}
+
+.add-filter-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    background-color: #252525;
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding: 0.5rem;
+    z-index: 1000;
+    min-width: 150px;
+}
+
+.add-filter-item {
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+.add-filter-item:hover {
+    background-color: #333;
+    color: var(--text-main);
+}
+
+/* View Controls */
+.view-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.grouping-select {
+    padding: 0.3rem 0.6rem;
+    background-color: transparent;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.view-toggle-group {
+    display: flex;
+    gap: 4px;
+    background-color: #1a1a1a;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.view-btn {
+    background: none;
+    border: none;
+    color: #555;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-btn:hover {
+    color: #aaa;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.view-btn.active {
+    color: var(--accent-blue-sky);
+    /* Highlight icon color */
+    background-color: rgba(135, 206, 235, 0.1);
+}

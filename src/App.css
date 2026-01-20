@@ -1,0 +1,86 @@
+.app-container {
+  padding: 1rem 4rem;
+  /* Reduced top padding since Header is separate */
+  max-width: 1800px;
+  /* Allow wider layout if screen permits */
+  margin: 0 auto;
+  width: 100%;
+  font-size: 0.9rem;
+  /* Slightly smaller base font to simulate zoom out */
+}
+
+/* Grid View Container */
+.album-container.grid-view {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /* Smaller cards (was 220) */
+  gap: 2rem;
+  /* Larger gap */
+  width: 100%;
+}
+
+/* List View Container */
+.album-container.list-view {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.album-item-wrapper {
+  animation: fadeIn 0.4s ease-out backwards;
+}
+
+/* Stagger animation for items */
+.album-item-wrapper:nth-child(n+1) {
+  animation-delay: 50ms;
+}
+
+.album-item-wrapper:nth-child(n+2) {
+  animation-delay: 100ms;
+}
+
+.album-item-wrapper:nth-child(n+3) {
+  animation-delay: 150ms;
+}
+
+.album-item-wrapper:nth-child(n+4) {
+  animation-delay: 200ms;
+}
+
+.album-item-wrapper:nth-child(n+5) {
+  animation-delay: 250ms;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-results {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+}
+
+/* Grouping Styles */
+.group-section {
+  margin-bottom: 2rem;
+}
+
+.group-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
