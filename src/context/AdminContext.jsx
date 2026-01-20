@@ -83,15 +83,33 @@ export const AdminProvider = ({ children }) => {
 
     const uploadImage = async (file) => {
         if (!isDev) return;
-        const formData = new FormData();
-        formData.append('file', file);
 
-        const res = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                try {
+                    const base64Content = reader.result.split(',')[1];
+                    const res = await fetch('/api/upload', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            filename: file.name,
+                            content: base64Content
+                        })
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        resolve(data);
+                    } else {
+                        reject(new Error("Upload failed"));
+                    }
+                } catch (e) {
+                    reject(e);
+                }
+            };
+            reader.onerror = error => reject(error);
         });
-        if (res.ok) return await res.json();
-        throw new Error("Upload failed");
     };
 
     return (

@@ -112,7 +112,7 @@ const StatsModal = ({ isOpen, onClose, albums }) => {
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content glass-panel" onClick={e => e.stopPropagation()}>
+            <div className="stats-modal-content glass-panel" onClick={e => e.stopPropagation()}>
                 <button className="close-btn" onClick={onClose}>&times;</button>
 
                 <h2 className="stats-title">Estadísticas</h2>

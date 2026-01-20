@@ -111,65 +111,29 @@ export default function localCmsPlugin() {
 
                 // === API: UPLOAD IMAGE ===
                 if (req.method === 'POST' && url === '/api/upload') {
-                    // Simple buffer reading for multipart (naive implementation for dev)
-                    // Ideally use 'busboy' or similar, but for zero-dep dev server:
-                    // We'll assume the client sends a simple FormData, but parsing multipart manually is hard.
-                    // EASIER STRATEGY: Client sends Base64 JSON? No, large payload.
-                    // Let's use a very simple multipart parser or strict regex if possible.
-                    // Actually, for a dev tool, we can just pipe the file content if we control the headers?
-
-                    // Let's try to parse the multipart boundaries roughly.
-                    const chunks = [];
-                    req.on('data', chunk => chunks.push(chunk));
-                    req.on('end', () => {
-                        const buffer = Buffer.concat(chunks);
-                        const contentType = req.headers['content-type'];
-                        const boundary = contentType.split('boundary=')[1];
-
-                        if (!boundary) {
+                    try {
+                        const { filename, content } = await readBody();
+                        if (!filename || !content) {
                             res.statusCode = 400;
-                            res.end(JSON.stringify({ error: 'No boundary' }));
+                            res.end(JSON.stringify({ error: 'Missing filename or content' }));
                             return;
                         }
 
-                        // Locate the file data in the buffer
-                        // This is a naive parser, robust enough for single file upload in dev
-                        const boundaryBuffer = Buffer.from('--' + boundary);
-                        const parts = [];
-                        let start = buffer.indexOf(boundaryBuffer) + boundaryBuffer.length;
-                        let end = buffer.indexOf(boundaryBuffer, start);
+                        // Sanitize filename
+                        const ext = path.extname(filename);
+                        const safeName = `${Date.now()}-${filename.replace(/[^a-z0-9.]/gi, '_')}`;
 
-                        while (end !== -1) {
-                            parts.push(buffer.subarray(start, end));
-                            start = end + boundaryBuffer.length;
-                            end = buffer.indexOf(boundaryBuffer, start);
-                        }
+                        // Write File
+                        const buffer = Buffer.from(content, 'base64');
+                        fs.writeFileSync(path.join(coversDir, safeName), buffer);
 
-                        // Look for the part with filename
-                        const filePart = parts.find(p => p.includes('filename="'));
-                        if (filePart) {
-                            const headerEnd = filePart.indexOf('\r\n\r\n');
-                            const header = filePart.subarray(0, headerEnd).toString();
-                            const filenameMatch = header.match(/filename="(.+?)"/);
-
-                            if (filenameMatch) {
-                                const originalName = filenameMatch[1];
-                                const ext = path.extname(originalName);
-                                // Sanitize filename (timestamp + original name limited)
-                                const safeName = `${Date.now()}-${originalName.replace(/[^a-z0-9.]/gi, '_')}`;
-                                const content = filePart.subarray(headerEnd + 4, filePart.length - 2); // Remove \r\n at end
-
-                                fs.writeFileSync(path.join(coversDir, safeName), content);
-
-                                res.setHeader('Content-Type', 'application/json');
-                                res.end(JSON.stringify({ url: `/covers/${safeName}` }));
-                                return;
-                            }
-                        }
-
-                        res.statusCode = 400;
-                        res.end(JSON.stringify({ error: 'No file found' }));
-                    });
+                        res.setHeader('Content-Type', 'application/json');
+                        res.end(JSON.stringify({ url: `/covers/${safeName}` }));
+                    } catch (err) {
+                        console.error('Upload error:', err);
+                        res.statusCode = 500;
+                        res.end(JSON.stringify({ error: err.message }));
+                    }
                     return;
                 }
 

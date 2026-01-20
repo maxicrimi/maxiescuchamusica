@@ -1,31 +1,76 @@
 [
   {
-    "id": 1,
-    "artist": "Radiohead",
-    "title": "In Rainbows",
-    "coverUrl": "https://picsum.photos/seed/1/300/300",
-    "country": "UK",
-    "year": 2007,
+    "id": "koffee-gifted-2022",
+    "artist": "Koffee",
+    "title": "Gifted",
+    "year": 2022,
+    "country": "Jamaica",
+    "coverUrl": "/covers/1768933710275-koffee..jpg",
     "tags": [
-      "Art Rock",
-      "Electronic",
-      "Experimental",
-      "Logos"
+      "Reggae",
+      "Dancehall"
     ],
-    "dateAdded": "2024-01-20T10:00:00Z"
+    "dateAdded": "2024-01-20T12:00:00.000Z"
   },
   {
-    "id": 2,
-    "artist": "Charly García",
-    "title": "Clics Modernos",
-    "coverUrl": "https://picsum.photos/seed/2/300/300",
-    "country": "Argentina",
-    "year": 1983,
+    "artist": "Lauryn Hill",
+    "title": "The Miseducation of Lauryn Hill",
+    "country": "Estados Unidos",
+    "year": 1998,
     "tags": [
-      "Rock Nacional",
-      "New Wave",
-      "Pop"
+      "Neo Soul",
+      "R&B",
+      "Hip Hop"
     ],
-    "dateAdded": "2024-01-21T15:30:00Z"
+    "coverUrl": "/covers/1768934064856-unnamed.jpg",
+    "dateAdded": "2026-01-20T18:30:46.392Z",
+    "id": 1768934029157
+  },
+  {
+    "artist": "Gregory Page",
+    "title": "One Hell Of A Memory",
+    "country": "Estados Unidos",
+    "year": 2025,
+    "tags": [
+      "Cantautor",
+      "Folk",
+      "Folk-pop",
+      "Americana",
+      "Indie Folk"
+    ],
+    "coverUrl": "/covers/1768934255564-page.jpg",
+    "dateAdded": "2026-01-20T18:35:01.354Z",
+    "id": 1768934193422
+  },
+  {
+    "artist": "My Chemical Romance",
+    "title": "Three Cheers for Sweet Revenge",
+    "country": "Estados Unidos",
+    "year": 2004,
+    "tags": [
+      "Rock Alternativo",
+      "Emo",
+      "Post-Hardcore",
+      "Pop-Punk"
+    ],
+    "coverUrl": "/covers/1768934384304-mychemunnamed__1_.jpg",
+    "dateAdded": "2026-01-20T18:39:27.834Z",
+    "id": 1768934385535
+  },
+  {
+    "artist": "Natalia Lafourcade",
+    "title": "Cancionera",
+    "country": "México",
+    "year": 2026,
+    "tags": [
+      "Cantautor",
+      "Folclore Latinoamericano",
+      "Folclore Mexicano",
+      "Jazz",
+      "Bolero"
+    ],
+    "coverUrl": "/covers/1768934831508-cancionera.jpg",
+    "dateAdded": "2026-01-20T18:45:27.600Z",
+    "id": 1768934799468
   }
 ]

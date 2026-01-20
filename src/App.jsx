@@ -120,10 +120,10 @@ function MusicApp() {
         sorted.sort((a, b) => b.artist.localeCompare(a.artist));
         break;
       case 'album_asc':
-        sorted.sort((a, b) => a.album.localeCompare(b.album));
+        sorted.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
         break;
       case 'album_desc':
-        sorted.sort((a, b) => b.album.localeCompare(a.album));
+        sorted.sort((a, b) => (b.title || '').localeCompare(a.title || ''));
         break;
       default:
         sorted.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
