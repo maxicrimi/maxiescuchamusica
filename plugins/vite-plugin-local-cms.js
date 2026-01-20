@@ -128,7 +128,7 @@ export default function localCmsPlugin() {
                         fs.writeFileSync(path.join(coversDir, safeName), buffer);
 
                         res.setHeader('Content-Type', 'application/json');
-                        res.end(JSON.stringify({ url: `/covers/${safeName}` }));
+                        res.end(JSON.stringify({ url: `covers/${safeName}` }));
                     } catch (err) {
                         console.error('Upload error:', err);
                         res.statusCode = 500;
