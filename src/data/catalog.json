@@ -72,5 +72,59 @@
     "coverUrl": "covers/1768934831508-cancionera.jpg",
     "dateAdded": "2026-01-20T18:45:27.600Z",
     "id": 1768934799468
+  },
+  {
+    "artist": "Official髭男dism",
+    "title": "Editorial",
+    "country": "Japón",
+    "year": 2021,
+    "tags": [
+      "J-Rock",
+      "Japanese Rock",
+      "J-Pop"
+    ],
+    "coverUrl": "covers/1769075617388-off.jpg",
+    "dateAdded": "2026-01-22T09:49:30.444Z",
+    "id": 1769075581057
+  },
+  {
+    "artist": "周杰倫",
+    "title": "最偉大的作品",
+    "country": "China",
+    "year": 2022,
+    "tags": [
+      "Mandopop",
+      "Pop"
+    ],
+    "coverUrl": "covers/1769075809488-unnamed__1_.jpg",
+    "dateAdded": "2026-01-22T09:54:49.572Z",
+    "id": 1769075704657
+  },
+  {
+    "artist": "E'jaz",
+    "title": "Googoosh",
+    "country": "Irán",
+    "year": 2012,
+    "tags": [
+      "Pop Persa",
+      "Pop"
+    ],
+    "coverUrl": "covers/1769075980247-unnamed__2_.jpg",
+    "dateAdded": "2026-01-22T09:57:54.901Z",
+    "id": 1769075964320
+  },
+  {
+    "artist": "Charly García",
+    "title": "Clics Modernos",
+    "country": "Argentina",
+    "year": 1983,
+    "tags": [
+      "Rock",
+      "Rock Argentino",
+      "New-Wave"
+    ],
+    "coverUrl": "covers/1769076384056-unnamed__3_.jpg",
+    "dateAdded": "2026-01-22T10:01:23.726Z",
+    "id": 1769076093154
   }
 ]
